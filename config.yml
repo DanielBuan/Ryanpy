@@ -1,0 +1,8 @@
+airports:
+     departureairports : ['FKB']
+     arrivalairports : ['MST','EIN','AMS']
+
+dates:
+     fromdate: 2018-04-23
+     todate: 2018-08-28
+     duration : [2,3,4,5]
