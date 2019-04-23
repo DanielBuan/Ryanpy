@@ -9,6 +9,10 @@ from utilities import parse_full_date, parse_full_date_without_milisec
 
 Flight = namedtuple('Flight', ['orig', 'dest', 'date_out', 'date_in', 'price', 'flight_number'])
 
+def get_airports():
+    print('Finding airports')
+    return get_json('https://desktopapps.ryanair.com/en-ie/res/stations')
+
 def get_airports_raw_data():
     print('Getting airports information')
     return get_json('https://api.ryanair.com/aggregate/4/common?embedded=airports&market=de-de')
