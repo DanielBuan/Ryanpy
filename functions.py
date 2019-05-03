@@ -1,3 +1,4 @@
+import datetime
 import json
 import requests
 
@@ -8,10 +9,12 @@ from utilities import parse_full_date, parse_full_date_without_milisec
 
 
 Flight = namedtuple('Flight', ['orig', 'dest', 'date_out', 'date_in', 'price', 'flight_number'])
+RequestOneFlight = namedtuple('RequestOneFlight', ['orig', 'dest', 'date'])
+RequestOneWayFlights = namedtuple('RequestOneWayFlights', ['orig', 'date_from', 'date_to', 'max_price_value'])
 
 def get_airports():
-    print('Finding airports')
-    return get_json('https://desktopapps.ryanair.com/en-ie/res/stations')
+    print('Finding all airports')
+    return get_json('https://desktopapps.ryanair.com/de-de/res/stations')
 
 def get_airports_raw_data():
     print('Getting airports information')
@@ -41,18 +44,18 @@ def aaaa(data):
                 print(item.partition(':')[2])
 
 
-def execute_request():
+def execute_request(request):
     query = {
         'ADT': 1,
         'CHD': 0,
-        'DateOut': '2019-04-27',
-        #'DateOut': request.date_to.isoformat(),
-        'Destination': 'ZAD',
-        #'Destination': request.dest,
+        #'DateOut': '2019-04-27',
+        'DateOut': request.date.isoformat(),
+        #'Destination': 'ZAD',
+        'Destination': request.dest,
         'FlexDaysOut': 6,
         'INF': 0,
-        'Origin': 'FKB',
-        #'Origin': request.orig,
+        #'Origin': 'FKB',
+        'Origin': request.orig,
         'RoundTrip': 'false',
         'TEEN': 0,
         'ToUs': 'AGREED',
@@ -94,20 +97,23 @@ def get_schedule():
 
     return res
 
-def get_one_way_flights_by_time_periode():
+def get_one_way_flights_by_time_periode(request):
     query = {
-        'departureAirportIataCode': 'FKB',
+        'departureAirportIataCode': request.orig,
+        #'departureAirportIataCode': 'FKB',
         'language': 'de',
         'limit': '16',
         'market': 'de-de',
         'offset': '0',
-        'outboundDepartureDateFrom': '2019-04-23',
-        'outboundDepartureDateTo': '2019-04-25',
-        'priceValueTo': '100'
+        'outboundDepartureDateFrom': request.date_from.strftime('%Y-%m-%d'),
+        #'outboundDepartureDateFrom': '2019-04-25',
+        'outboundDepartureDateTo': request.date_to.strftime('%Y-%m-%d'),
+        #'outboundDepartureDateTo': '2019-04-26',
+        'priceValueTo': request.max_price_value
+        #'priceValueTo': '100'
     }
 
-    y = requests.get('https://services-api.ryanair.com/farfnd/3/oneWayFares', params=query)
-    res = json.loads(y.text)
+    res = get_json('https://services-api.ryanair.com/farfnd/3/oneWayFares', params=query)
     #print(res)
 
     return [
@@ -122,7 +128,40 @@ def get_one_way_flights_by_time_periode():
         for trip in res['fares']
     ]
 
-#print(get_one_way_flights_by_time_periode())
+
+def get_full_airport_name(shortname):
+    print('Get full name!')
+    data = get_airports_raw_data()
+    for airport in data['airports']:
+        if airport['iataCode'] == shortname:
+            print(airport['name'])
+            return airport['name']
+
+
+requestOneFlight = RequestOneFlight(
+    orig='FKB',
+    dest='ZAD',
+    date=datetime.datetime(2019, 4, 26)
+)
+
+requestOneWayFlights = RequestOneWayFlights(
+    orig='FRA',
+    # orig='FKB',
+    # orig='STR',
+    date_from=datetime.datetime(2019, 5, 24),
+    date_to=datetime.datetime(2019, 5, 24),
+    max_price_value='50'
+)
+
+#get_full_airport_name('TSF')
+
+#ne = execute_request(requestOneFlight)
+#print(ne)
+
+#print(requestOneFlight.date.strftime('%Y-%m-%d'))
+#print(requestOneWayFlights.date_from.isoformat())
+
+#print(get_one_way_flights_by_time_periode(requestOneWayFlights))
 
 #data = get_airports_raw_data()
 #print(data)
@@ -130,13 +169,14 @@ def get_one_way_flights_by_time_periode():
 #data_conections = get_connections_from_stations_data(data)
 #print(data_conections['FKB'])
 
+
 #get_schedule()
 
-#a = execute_request()
+#a = execute_request(requestOneFlight)
 #print(a)
+#print(execute_request(requestOneFlight))
 
 #c = get_one_way_flights_by_time_periode()
 #for i in range(len(c)):
     #print(c[i].dest)
 
-print("done")

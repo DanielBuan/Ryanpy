@@ -1,4 +1,10 @@
 import datetime
+import yaml
+
+with open("Config.yml", 'r') as ymlfile:
+    config = yaml.load(ymlfile, Loader=yaml.SafeLoader)
+
+from_date, to_date, duration = config['dates']['fromdate'], config['dates']['todate'], config['dates']['duration']
 
 def get_dates(from_date, to_date, day_list=[0,1,2,3,4,5,6]):
     date_list = list()
@@ -12,8 +18,8 @@ def get_dates(from_date, to_date, day_list=[0,1,2,3,4,5,6]):
     return date_list
 
 
-from_date = datetime.datetime(2019, 4, 23)
-to_date = datetime.datetime(2019, 4, 28)
+#from_date = datetime.datetime(2019, 4, 23)
+#to_date = datetime.datetime(2019, 4, 28)
 
-listDates = get_dates(from_date, to_date)
-print(listDates)
+#listDates = get_dates(from_date, to_date)
+#print(listDates)
