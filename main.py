@@ -1,4 +1,5 @@
 import datetime
+import json
 from collections import namedtuple
 import yaml
 
@@ -22,9 +23,10 @@ data_conections = get_connections_from_stations_data(get_airports_raw_data())
 #print(data_conections['FKB'])
 for i in range(len(departure_airports)):
     print("Looking for connections starting form: {}.".format(departure_airports[i]))
-    print(data_conections[departure_airports[i]])
+    print("All destinations: {}.".format(data_conections[departure_airports[i]]))
     #TODO: create request - which can given as paramater to function
     for item in data_conections[departure_airports[i]]:
+        print("Looking for connections starting form: {} to {}.".format(departure_airports[i], item))
         list_two_way = []
         requestOneFlight = RequestOneFlight(
             orig=departure_airports[i],
@@ -42,8 +44,13 @@ for i in range(len(departure_airports)):
         flight_list.append(list_two_way)
 
 
+
+with open('flight.txt', 'w') as file_handler:
+    for item in flight_list:
+        file_handler.write("{}\n".format(item))
+
 print(flight_list)
-print(flight_list[1])
+
 
 
 print("DONE!")

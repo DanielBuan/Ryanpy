@@ -48,7 +48,7 @@ def execute_request(request):
     query = {
         'ADT': 1,
         'CHD': 0,
-        #'DateOut': '2019-04-27',
+        #'DateOut': '2019-05-27',
         'DateOut': request.date.isoformat(),
         #'Destination': 'ZAD',
         'Destination': request.dest,
@@ -139,27 +139,25 @@ def get_full_airport_name(shortname):
 
 
 requestOneFlight = RequestOneFlight(
-    orig='FKB',
-    dest='ZAD',
-    date=datetime.datetime(2019, 4, 26)
+    orig='NCE',
+    dest='STR',
+    date=datetime.datetime(2019, 5, 25)
 )
 
 requestOneWayFlights = RequestOneWayFlights(
-    orig='FRA',
+    # orig='FRA',
     # orig='FKB',
-    # orig='STR',
+    orig='STR',
+    # orig='AHO',
     date_from=datetime.datetime(2019, 5, 24),
     date_to=datetime.datetime(2019, 5, 24),
-    max_price_value='50'
+    max_price_value='200'
 )
+
 
 #get_full_airport_name('TSF')
 
-#ne = execute_request(requestOneFlight)
-#print(ne)
-
-#print(requestOneFlight.date.strftime('%Y-%m-%d'))
-#print(requestOneWayFlights.date_from.isoformat())
+#print(execute_request(requestOneFlight))
 
 #print(get_one_way_flights_by_time_periode(requestOneWayFlights))
 

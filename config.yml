@@ -3,6 +3,6 @@ airports:
      arrivalairports : ['MST','EIN','AMS']
 
 dates:
-     fromdate: 2019-04-26
-     todate: 2019-04-28
+     fromdate: 2019-05-24
+     todate: 2019-05-27
      duration : [2,3,4,5]
