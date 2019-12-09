@@ -31,18 +31,6 @@ def get_connections_from_stations_data(data):
         for airport in data['airports']
     }
 
-def aaaa(data):
-    print(len(data['airports']))
-
-    for airport in data['airports']:
-        print('###')
-        print(airport['iataCode'])
-        print('###')
-        for item in airport['routes']:
-            if item.startswith('airport:'):
-                item.partition(':')
-                print(item.partition(':')[2])
-
 
 def execute_request(request):
     query = {
@@ -137,29 +125,35 @@ def get_full_airport_name(shortname):
             print(airport['name'])
             return airport['name']
 
+def print_flights(flights):
+    for i in range(len(flights)):
+        print(flights[i])
+
 
 requestOneFlight = RequestOneFlight(
-    orig='NCE',
+    orig='BQL',
     dest='STR',
-    date=datetime.datetime(2019, 5, 25)
+    date=datetime.datetime(2019, 5, 31)
 )
 
 requestOneWayFlights = RequestOneWayFlights(
     # orig='FRA',
-    # orig='FKB',
-    orig='STR',
-    # orig='AHO',
-    date_from=datetime.datetime(2019, 5, 24),
-    date_to=datetime.datetime(2019, 5, 24),
-    max_price_value='200'
+    orig='FKB',
+    # orig='STR',
+    # orig='BLQ',
+    date_from=datetime.datetime(2019, 9, 25),
+    date_to=datetime.datetime(2019, 9, 27),
+    max_price_value='50'
 )
 
 
-#get_full_airport_name('TSF')
+get_full_airport_name('TPS')
 
 #print(execute_request(requestOneFlight))
 
 #print(get_one_way_flights_by_time_periode(requestOneWayFlights))
+
+#print_flights(get_one_way_flights_by_time_periode(requestOneWayFlights))
 
 #data = get_airports_raw_data()
 #print(data)
